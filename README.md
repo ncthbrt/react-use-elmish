@@ -1,6 +1,8 @@
 # react-use-elmish
 
-`react-use-elmish` - A React hook for unified purely-functional state and effect management.
+A React hook for unified purely-functional state and effect management.
+
+[![Coverage Status](https://coveralls.io/repos/github/ncthbrt/react-use-elmish/badge.svg?branch=master)](https://coveralls.io/github/ncthbrt/react-use-elmish?branch=master) ![GitHub](https://img.shields.io/github/license/ncthbrt/react-use-elmish) ![npm](https://img.shields.io/npm/v/react-use-elmish)
 
 ## What is it?
 
