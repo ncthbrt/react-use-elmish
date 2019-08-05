@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useLayoutEffect } from "react";
-
+import * as Effects from "./effects";
 export type Dispatch<A> = (value: A) => void;
 export type Effect<Action> = Array<(dispatch: Dispatch<Action>) => void>;
 export type StateEffectPair<State, Action> = [State, Effect<Action>];
@@ -55,5 +55,7 @@ export function useElmish<R extends Reducer<any, any>, I>(
 
   return [state[0], dispatch];
 }
+
+export { Effects };
 
 export default useElmish;

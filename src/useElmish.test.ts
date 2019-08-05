@@ -1,6 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks";
-import { useElmish } from "./index";
-import * as Effects from "./effects";
+import useElmish, { Effects } from "./index";
 
 test("should act as a reducer", () => {
   const { result } = renderHook(() =>

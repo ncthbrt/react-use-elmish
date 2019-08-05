@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "watch": "jest --watch"
+    "watch": "jest --watch",
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "@types/jest": "^24.0.16",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",
+    "coveralls": "^3.0.5",
     "jest": "^24.8.0",
     "react-test-renderer": "^16.8.6",
     "source-map-loader": "^0.2.4",
