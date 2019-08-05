@@ -5,9 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest",
+    "test-only": "jest",
     "watch": "jest --watch",    
-    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
+    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
+    "test", "npm run coveralls",
+    "prepack": "webpack"
   },
   "repository": {
     "type": "git",

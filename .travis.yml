@@ -1,9 +1,12 @@
+language: node_js
+node_js:
+  - "12"
 deploy:
   provider: npm
-  email: nick@cuthbert.co.za
-  skip_cleanup: true
+  email: nick@cuthbert.co.za  
   api_key:
     secure: AEk8TgW6acHN5hXBGKGu0c308+jjFn012LxF3drgYchxTN3vWhAdNAabeGZL6XPl17jMswFheU8C7857iOixpj8ag7Rrc6YFkzRImDQ3q7DuLiU+Us98u8ueszBCzyACE0BwoSd3Sbzq7PNarv2bpwWuZDKF3AfEhbZ4S+LcAtV185cuFomVV5lsreBdUtHUlYYvbJ3WvkEzzzVRGOtscaXbx6Z14hbtFrALqOyYoG0H/rg/Ncg3eEzJK/8KVlW/WQbKQO/qskYicIJGgWBhjfrNExI7GomqBVZZRDhG2mewPXrSw4joK7j3SjXvbqO91dT6Oyyj3Jx2I07TUia/c6bzQUywjrLAT0K3zJOQ4krSEKNMGi0eemNXvnOevGYEnSJ5EjNqB2AGp6GRJJEWEM0LdlMmCnQvavN7Wha8DS7z1s9Bm2g12Qejjf7zUEURqI4g8o0Lenb/CxHJYMUpHxJg76yXQCmdExE/R7EQpefIcbe36x8rDwSF56vGA0qfj+S97JBk0KnEOQxOZHMMXhYoaSPf2nTvGc1u/bjhZS/QGrJekpAOJAqRVCaTGOXJlkaIEpEZhvv5UA4qAN3STKVUx0DN3mOM9A9NCctQ3qoYBojDG6mLm2fyD2OIvSt4sU529iwnTEmqOnKFRI0FdraqDO2n4AmY3BnbBiOpraU=
   on:
     tags: true
     repo: ncthbrt/react-use-elmish
+    branch: master
