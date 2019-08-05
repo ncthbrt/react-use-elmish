@@ -10,3 +10,4 @@ deploy:
   on:
     tags: true
     repo: ncthbrt/react-use-elmish
+    branch: master

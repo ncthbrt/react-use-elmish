@@ -1,4 +1,6 @@
-import { useReducer, useEffect, useLayoutEffect } from "react";
+import React from "react";
+import { useReducer, useEffect } from "react";
+
 import * as Effects from "./effects";
 export type Dispatch<A> = (value: A) => void;
 export type Effect<Action> = Array<(dispatch: Dispatch<Action>) => void>;

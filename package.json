@@ -1,6 +1,6 @@
 {
   "name": "react-use-elmish",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Hook for state and effect management using the Elm Architecture",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -38,8 +38,5 @@
   },
   "peerDependencies": {
     "react": "^16.8.6"
-  },
-  "dependencies": {
-    "react": "^16.8.6"
-  }
+  }  
 }
