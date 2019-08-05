@@ -15,7 +15,7 @@ Here is a simple example which every second alternatives the state between 'TICK
 import useElmish, { Effects } from "./index";
 
 const [state, dispatch] = useElmish((state, action) => {
-  if (action == "INCREMENT_CLOCK") {
+  if (action === "INCREMENT_CLOCK") {
     return [
       state === "TICK" ? "TOCK" : "TICK",
       Effects.delay("INCREMENT_CLOCK", 1000)
