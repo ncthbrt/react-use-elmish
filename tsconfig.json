@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "outDir": "./dist/",
-    "sourceMap": true,
+    "lib": ["es2017", "es7", "es6", "dom"],
     "noImplicitAny": true,
+    "strict": true,
     "module": "commonjs",
+    "esModuleInterop": true,
     "target": "es6"
-  }
+  },
+  "exclude": ["node_modules", "dist"]
 }

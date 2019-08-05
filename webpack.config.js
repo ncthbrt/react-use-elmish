@@ -1,5 +1,8 @@
 module.exports = {
   mode: "production",
+  output: {
+    filename: "index.js"
+  },
 
   // Enable sourcemaps for debugging webpack's output.
   devtool: "source-map",

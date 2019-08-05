@@ -87,4 +87,8 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-dist/
+src/
+*.test.d.ts
+.travis.yml
+jest.config.js
+webpack.config.js
