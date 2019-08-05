@@ -6,9 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test-only": "jest",
-    "watch": "jest --watch",    
-    "coveralls": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
-    "test", "npm run coveralls",
+    "watch": "jest --watch",
+    "test": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "prepack": "webpack"
   },
   "repository": {
