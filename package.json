@@ -8,7 +8,7 @@
     "test-only": "jest",
     "watch": "jest --watch",
     "test": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "prepack": "webpack"
+    "prepack": "npm install && webpack"
   },
   "repository": {
     "type": "git",
