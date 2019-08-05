@@ -14,17 +14,20 @@ The main difference is instead of simply returning the next state in your reduce
 Here is a simple example which every second alternatives the state between 'TICK' and 'TOCK':
 
 ```javascript
-import useElmish, { Effects } from "./index";
+import useElmish, { Effects } from "react-use-elmish";
 
-const [state, dispatch] = useElmish((state, action) => {
-  if (action === "INCREMENT_CLOCK") {
-    return [
-      state === "TICK" ? "TOCK" : "TICK",
-      Effects.delay("INCREMENT_CLOCK", 1000)
-    ];
-  }
-  return [state, Effects.none()];
-}, "TICK");
+const [state, dispatch] = useElmish(
+  (state, action) => {
+    if (action === "INCREMENT_CLOCK") {
+      return [
+        state === "TICK" ? "TOCK" : "TICK",
+        Effects.delay("INCREMENT_CLOCK", 1000)
+      ];
+    }
+    return [state, Effects.none()];
+  },
+  /*initialState: */ () => ["TICK", Effects.none()]
+);
 ```
 
 ## Why is it?

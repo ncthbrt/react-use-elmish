@@ -7,8 +7,8 @@
   "scripts": {
     "test-only": "jest",
     "watch": "jest --watch",
-    "test": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "prepack": "webpack"
+    "test": "jest --coverage --coverageReporters=text-lcov | coveralls",    
+    "prepack": "tsc"
   },
   "repository": {
     "type": "git",
@@ -32,9 +32,7 @@
     "source-map-loader": "^0.2.4",
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.4",
-    "typescript": "^3.5.3",
-    "webpack": "^4.38.0",
-    "webpack-cli": "^3.3.6"
+    "typescript": "^3.5.3"    
   },
   "peerDependencies": {
     "react": "^16.8.6"
