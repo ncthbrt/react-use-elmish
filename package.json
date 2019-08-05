@@ -7,7 +7,7 @@
   "scripts": {
     "test-only": "jest",
     "watch": "jest --watch",
-    "test": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
+    "test": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "prepack": "webpack"
   },
   "repository": {
