@@ -66,6 +66,8 @@ Yarn:
 
 `fromIterator(iterable)`: Dispatches each item in the iterable collection in order.
 
+`combine(...effects)`: Combines effects toghether. Effects are scheduled in order.
+
 ## Writing your own effects
 
 While the included effect creators should serve many purposes, it is quite easy to write your own side effect creator.

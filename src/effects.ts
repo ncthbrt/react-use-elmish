@@ -35,3 +35,10 @@ export function fromIterator<Action, I extends Iterable<Action>>(
     }
   ];
 }
+
+export function combine<Action>(...effects: Effect<Action>[]): Effect<Action> {
+  return effects.reduce(
+    (prev, effect: Effect<Action>) => [...prev, ...effect],
+    []
+  );
+}

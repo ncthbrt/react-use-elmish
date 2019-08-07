@@ -1,12 +1,12 @@
 {
   "name": "react-use-elmish",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "React Hook for state and effect management using the Elm Architecture",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test-only": "jest",
-    "watch": "jest --watch",
+    "watch": "jest --watch --coverage",
     "test": "jest --coverage --coverageReporters=text-lcov | coveralls",    
     "prepack": "tsc"
   },

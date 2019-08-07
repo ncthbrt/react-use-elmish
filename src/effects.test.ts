@@ -90,3 +90,14 @@ describe("fromIterator()", () => {
     expect(mockDispatch).toHaveBeenNthCalledWith(3, 3);
   });
 });
+
+describe("combine()", () => {
+  test("should concatenate two effects together", () => {
+    const effect1 = Effects.fromIterator([1, 2, 3]);
+    const effect2 = Effects.action(4);
+    const effects = Effects.combine(effect1, effect2);
+    expect(effects[0]).toBeInstanceOf(Function);
+    expect(effects[1]).toBeInstanceOf(Function);
+    expect(effects).toHaveLength(2);
+  });
+});
