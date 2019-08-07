@@ -26,7 +26,7 @@ const [state, dispatch] = useElmish(
     }
     return [state, Effects.none()];
   },
-  /*initialState: */ () => ["TICK", Effects.none()]
+  /*initialState: */ () => ["TICK", Effects.action("INCREMENT_CLOCK")]
 );
 ```
 
