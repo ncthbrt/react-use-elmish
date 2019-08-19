@@ -44,18 +44,18 @@ export function useElmish<R extends Reducer<any, any>, I>(
     _ => {
       const initialState = initializer();
       
-      effects.current = initialState[1];
+      effects.current = [...initialState[1]];
       return initialState[0];
     }
   );
 
   useEffect(() => {
-    const eff = effects.current;
+    const eff = [...effects.current];
     if(effects.current.length > 0) {      
       effects.current = [];
       eff.forEach((x: (dispatch: Dispatch<ReducerAction<R>>) => void) => x(dispatch));
     }    
-  }, [effects.current]);
+  }, [state, effects.current]);
 
   return [state, dispatch];
 }
