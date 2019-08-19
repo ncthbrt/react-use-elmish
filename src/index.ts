@@ -1,5 +1,5 @@
 import React from "react";
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useRef } from "react";
 
 import * as Effects from "./effects";
 export type Dispatch<A> = (value: A) => void;
@@ -32,30 +32,32 @@ export function useElmish<R extends Reducer<any, any>, I>(
   reducer: R,
   initializer: () => ReducerStateEffectPair<R>
 ): [ReducerState<R>, Dispatch<ReducerAction<R>>] {
+  let effects = useRef<Effect<ReducerAction<R>>>([]);
+
   let [state, dispatch] = useReducer(
     (prevState, action) => {
-      let nextStateAndEffect = reducer(prevState[0], action);
-      // Same state, no side-effects. Prevents unnecessary rerendering
-      if (
-        Object.is(prevState[0], nextStateAndEffect[0]) &&
-        nextStateAndEffect[1].length == 0
-      ) {
-        return prevState;
-      } else {
-        return nextStateAndEffect;
-      }
+      let nextStateAndEffect = reducer(prevState, action);
+      effects.current = [...effects.current, ...nextStateAndEffect[1]];
+      return nextStateAndEffect[0];      
     },
     null,
-    _ => initializer()
+    _ => {
+      const initialState = initializer();
+      
+      effects.current = initialState[1];
+      return initialState[0];
+    }
   );
 
   useEffect(() => {
-    state[1].forEach((x: (dispatch: Dispatch<ReducerAction<R>>) => void) =>
-      x(dispatch)
-    );
-  }, [state]);
+    const eff = effects.current;
+    if(effects.current.length > 0) {      
+      effects.current = [];
+      eff.forEach((x: (dispatch: Dispatch<ReducerAction<R>>) => void) => x(dispatch));
+    }    
+  }, [effects.current]);
 
-  return [state[0], dispatch];
+  return [state, dispatch];
 }
 
 export { Effects };
