@@ -28,34 +28,61 @@ export type ReducerStateEffectPair<
   R extends Reducer<any, any>
 > = R extends Reducer<infer S, infer A> ? [S, Effect<A>] : never;
 
+const addEffects = 0;
+const removeEffects = 1;
+type EffectReducerAction<Action> =
+  | [0 /* Add effects */, Effect<Action>]
+  | [1 /* Remove effects */, Effect<Action>];
+
+
 export function useElmish<R extends Reducer<any, any>, I>(
   reducer: R,
   initializer: () => ReducerStateEffectPair<R>
 ): [ReducerState<R>, Dispatch<ReducerAction<R>>] {
-  let [state, dispatch] = useReducer(
-    (prevState, action) => {
-      let nextStateAndEffect = reducer(prevState[0], action);
-      // Same state, no side-effects. Prevents unnecessary rerendering
-      if (
-        Object.is(prevState[0], nextStateAndEffect[0]) &&
-        nextStateAndEffect[1].length == 0
-      ) {
-        return prevState;
-      } else {
-        return nextStateAndEffect;
+  const [effects, effectsDispatch] = useReducer(
+    (
+      prev: Effect<ReducerAction<R>>,
+      [actionType, effects]: EffectReducerAction<ReducerAction<R>>
+    ) => {
+      switch (actionType) {
+        case 0:
+          return ([] as Effect<ReducerAction<R>>).concat(prev, effects);
+        case 1:
+          return prev.filter(x => !effects.includes(x));        
       }
     },
+    []
+  );
+
+  const [state, dispatch] = useReducer(
+    (prevState, action) => {
+      let [nextState, nextEffects] = reducer(prevState, action);
+      if (nextEffects.length > 0) {
+        effectsDispatch([addEffects, nextEffects]);
+      }
+      return nextState;
+    },
     null,
-    _ => initializer()
+    _ => {
+      const [state, eff] = initializer();      
+      if (eff.length > 0) {
+        effectsDispatch([addEffects, eff]);
+      }
+      return state;
+    }
   );
 
   useEffect(() => {
-    state[1].forEach((x: (dispatch: Dispatch<ReducerAction<R>>) => void) =>
-      x(dispatch)
-    );
-  }, [state]);
+    if (effects.length > 0) {
+      const eff = [...effects];
+      effectsDispatch([removeEffects, eff]);
+      eff.forEach((x: (dispatch: Dispatch<ReducerAction<R>>) => void) =>
+        x(dispatch)
+      );
+    }
+  });
 
-  return [state[0], dispatch];
+  return [state, dispatch];
 }
 
 export { Effects };

@@ -4,8 +4,10 @@
     "outDir": "./dist/",
     "lib": ["es2017", "es7", "es6", "dom"],
     "noImplicitAny": true,
-    "strict": true,
+    "strict": true,    
     "module": "commonjs",
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "target": "es6"
   },
