@@ -1,3 +1,5 @@
+## Note: Currently fixing an issue w/ double dispatch of side effects. Should hopefully be fixed by before end of day. 
+
 # react-use-elmish
 
 A React hook for unified purely-functional state and effect management.
