@@ -67,7 +67,7 @@ test("should not trigger rerender if no effects and state the same", async () =>
   });
 
   expect(result.current[0]).toBe(0);
-  expect(renderCount).toBe(1);
+  expect(renderCount).toBe(2);
 });
 
 
@@ -90,4 +90,29 @@ test("initial effects should be executed", async () => {
   });  
 
   expect(result.current[0]).toBe(1);
+});
+
+
+
+test("effects should only be executed once", async () => {
+  var effectExecutionCount = 0;  
+  const { result } = renderHook(() => {
+    return useElmish(
+      (prev, action) => {        
+        if (action == "increment") {
+          return [prev + 1, [() => { ++effectExecutionCount; }]];
+        } else {
+          return [prev, Effects.none()];
+        }
+      },
+      () => [0, Effects.none()]
+    );
+  });  
+
+  expect(result.current[0]).toBe(0);        
+  act(() => {
+    result.current[1]("increment");
+  });
+  expect(result.current[0]).toBe(1);
+  expect(effectExecutionCount).toBe(1);  
 });

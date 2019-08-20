@@ -28,61 +28,66 @@ export type ReducerStateEffectPair<
   R extends Reducer<any, any>
 > = R extends Reducer<infer S, infer A> ? [S, Effect<A>] : never;
 
-const addEffects = 0;
-const removeEffects = 1;
-type EffectReducerAction<Action> =
-  | [0 /* Add effects */, Effect<Action>]
-  | [1 /* Remove effects */, Effect<Action>];
+const removeEffects = 0;
+const domainAction = 1;
 
+type EffectAction<Action> =
+  | [0 /* Remove effects */, Effect<Action>]
+  | [1 /* Domain action */, Action];
 
-export function useElmish<R extends Reducer<any, any>, I>(
+type EffectReducerAction<R extends Reducer<any, any>> = R extends Reducer<
+  any,
+  infer A
+>
+  ? EffectAction<A>
+  : never;
+
+function throwIfNotNever(x: never) {
+  if (!!x) {
+    throw new TypeError(`Expected value ${x} to be of type "never"`);
+  }
+  return x;
+}
+
+export function useElmish<R extends Reducer<any, any>>(
   reducer: R,
   initializer: () => ReducerStateEffectPair<R>
 ): [ReducerState<R>, Dispatch<ReducerAction<R>>] {
-  const [effects, effectsDispatch] = useReducer(
-    (
-      prev: Effect<ReducerAction<R>>,
-      [actionType, effects]: EffectReducerAction<ReducerAction<R>>
-    ) => {
-      switch (actionType) {
-        case 0:
-          return ([] as Effect<ReducerAction<R>>).concat(prev, effects);
-        case 1:
-          return prev.filter(x => !effects.includes(x));        
+  const [[state, effects], dispatch] = useReducer(
+    ([prevState, prevEffects]: ReducerStateEffectPair<R>, action: EffectReducerAction<R>) => {
+      switch (action[0]) {
+        case 0: {
+          const nextEffects = prevEffects.filter(x => !action[1].includes(x));
+          return [prevState, nextEffects] as ReducerStateEffectPair<R>;
+        }
+        case 1: {
+          const [nextState, newEffects] = reducer(prevState, action[1]);
+          return [
+            nextState,
+            [...prevEffects, ...newEffects]
+          ] as ReducerStateEffectPair<R>;
+        }
+        default: {
+          return throwIfNotNever(action[0]);
+        }
       }
-    },
-    []
-  );
-
-  const [state, dispatch] = useReducer(
-    (prevState, action) => {
-      let [nextState, nextEffects] = reducer(prevState, action);
-      if (nextEffects.length > 0) {
-        effectsDispatch([addEffects, nextEffects]);
-      }
-      return nextState;
     },
     null,
-    _ => {
-      const [state, eff] = initializer();      
-      if (eff.length > 0) {
-        effectsDispatch([addEffects, eff]);
-      }
-      return state;
-    }
+    () => initializer()
   );
+
+  const subDispatch = (action: ReducerAction<R>) =>
+    dispatch([domainAction, action] as EffectReducerAction<R>);
 
   useEffect(() => {
     if (effects.length > 0) {
       const eff = [...effects];
-      effectsDispatch([removeEffects, eff]);
-      eff.forEach((x: (dispatch: Dispatch<ReducerAction<R>>) => void) =>
-        x(dispatch)
-      );
+      dispatch([removeEffects, eff] as EffectReducerAction<R>);
+      eff.forEach(x => x(subDispatch));
     }
-  });
+  }, [effects]);
 
-  return [state, dispatch];
+  return [state, subDispatch];
 }
 
 export { Effects };
