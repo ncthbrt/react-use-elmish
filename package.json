@@ -1,6 +1,6 @@
 {
   "name": "react-use-elmish",
-  "version": "0.2.3-beta.0",
+  "version": "0.2.3",
   "description": "React Hook for state and effect management using the Elm Architecture",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
