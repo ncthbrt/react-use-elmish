@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useReducer, useEffect } from "react";
 
 import * as Effects from "./effects";
@@ -49,35 +49,41 @@ function throwIfNotNever(x: never) {
   return x;
 }
 
+function makeElmishReducer<R extends Reducer<any, any>>(reducer: R) {
+  return ([prevState, prevEffects]: ReducerStateEffectPair<R>, action: EffectReducerAction<R>) => {
+    switch (action[0]) {
+      case 0: {
+        const nextEffects = prevEffects.filter(x => !action[1].includes(x));
+        return [prevState, nextEffects] as ReducerStateEffectPair<R>;
+      }
+      case 1: {
+        const [nextState, newEffects] = reducer(prevState, action[1]);
+        return [
+          nextState,
+          [...prevEffects, ...newEffects]
+        ] as ReducerStateEffectPair<R>;
+      }
+      default: {
+        return throwIfNotNever(action[0]);
+      }
+    }
+  }
+}
+
 export function useElmish<R extends Reducer<any, any>>(
   reducer: R,
   initializer: () => ReducerStateEffectPair<R>
 ): [ReducerState<R>, Dispatch<ReducerAction<R>>] {
+  const memoizedReducer = useCallback(makeElmishReducer(reducer), [reducer]);
   const [[state, effects], dispatch] = useReducer(
-    ([prevState, prevEffects]: ReducerStateEffectPair<R>, action: EffectReducerAction<R>) => {
-      switch (action[0]) {
-        case 0: {
-          const nextEffects = prevEffects.filter(x => !action[1].includes(x));
-          return [prevState, nextEffects] as ReducerStateEffectPair<R>;
-        }
-        case 1: {
-          const [nextState, newEffects] = reducer(prevState, action[1]);
-          return [
-            nextState,
-            [...prevEffects, ...newEffects]
-          ] as ReducerStateEffectPair<R>;
-        }
-        default: {
-          return throwIfNotNever(action[0]);
-        }
-      }
-    },
+    memoizedReducer,
     null,
-    () => initializer()
+    initializer
   );
-
-  const subDispatch = (action: ReducerAction<R>) =>
-    dispatch([domainAction, action] as EffectReducerAction<R>);
+  
+  const subDispatch = React.useCallback((action: ReducerAction<R>) =>
+    dispatch([domainAction, action] as EffectReducerAction<R>), [dispatch]
+  );
 
   useEffect(() => {
     if (effects.length > 0) {
