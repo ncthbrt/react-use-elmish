@@ -1,6 +1,7 @@
-## Note: Currently fixing an issue w/ double dispatch of side effects. Should hopefully be fixed by before end of day. 
 
 # react-use-elmish
+
+> Note: Please ensure that you upgrade to a version >= 0.2.2. Previous versions have a bug which may mean that not all of your side effects may execute. 
 
 A React hook for unified purely-functional state and effect management.
 
