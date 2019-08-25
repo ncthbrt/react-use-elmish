@@ -14,7 +14,7 @@ is a small react-hook for js and typescript, which combines `useReducer` and `us
 
 The main difference is instead of simply returning the next state in your reducer, you _also_ return a set of side effects. These side effects are executed in a `useEffect`.
 
-Here is a simple example which every second alternatives the state between 'TICK' and 'TOCK':
+Here is a simple example which every second alternates the state between 'TICK' and 'TOCK':
 
 ```javascript
 import useElmish, { Effects } from "react-use-elmish";
