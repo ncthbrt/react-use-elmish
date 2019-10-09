@@ -35,11 +35,11 @@ const [state, dispatch] = useElmish(
 
 ## Why is it?
 
-`Redux` and the `useReducer` hook are a great pattern for performing application state management. However they lead it as an exercise to the reader to implement or integrate an effects system (such as `redux-thunk`, `redux-saga` or `redux-observable`). The downside with this approach is that your effects and state management are quite decoupled. In some approaches, the side effect system has to observe the state and trigger effects based on changes to the state, in others you have to remember to call an 'action creator' which performs the effect and dispatches events to the store as it goes along. These other approaches to effect management are often in some ways quite semantically awkward. You dispatch 'actions', not 'events', yet your reducer handles these 'actions' as though they have happened, instead of being an earnest request to do the actual thing.
+`Redux` and the `useReducer` hook are a great pattern for performing application state management. However they leave it as an exercise to the reader to implement or integrate an effects system (such as `redux-thunk`, `redux-saga` or `redux-observable`). The downside with this approach is that your effects and state management are quite decoupled. In some approaches, the side effect system has to observe the state and trigger effects based on changes to the state, in others you have to remember to call an 'action creator' which performs the effect and dispatches events to the store as it goes along. These other approaches to effect management are often in some ways quite semantically awkward. You dispatch 'actions', not 'events', yet your reducer handles these 'actions' as though they have happened, instead of being an earnest request to do the actual thing.
 
 The Elmish architecture takes an alternative approach. When you dispatch an action, it is treated as a true action. It is a thing that the application _wants_ to happen. The reducer schedules side-effects if the action requires it (but doesn't execute the action itself, making the reducer still stateless). This greatly increases the cohesiveness of your application, and reduces a certain amount of boilerplate.
 
-The hook makes care not to trigger redraws if the state is unchanged and no side-effects have been scheduled.
+The hook makes care not to trigger redraws if the state is unchanged and no side-effects have been scheduled. 
 
 ## Installing
 
