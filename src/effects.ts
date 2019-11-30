@@ -12,24 +12,24 @@ export function action<Action>(action: Action): Effect<Action> {
   return [dispatch => dispatch(action)];
 }
 
-export function fromPromise<Action, Value, Error>(
+export function fromPromise<Action, Value = unknown, Err = Error>(
   promise: () => Promise<Value>,
   ofSuccess: (value: Value) => Action,
-  ofError: (error: Error) => Action
+  ofError: (error: Err) => Action
 ): Effect<Action>
 
-export function fromPromise<Action, Value, Error>(
+export function fromPromise<Action, Value = unknown, Err = Error>(
   promise: () => Promise<Value>,
-  ofError: (error: Error) => Action
+  ofError: (error: Err) => Action
 ): Effect<Action>
 
-export function fromPromise<Action, Value, Error>(
+export function fromPromise<Action, Value, Err>(
   promise: () => Promise<Value>,
-  ofSuccess: ((value: Value) => Action) | ((error: Error) => Action),
-  ofError?: (error: Error) => Action
+  ofSuccess: ((value: Value) => Action) | ((error: Err) => Action),
+  ofError?: (error: Err) => Action
 ): Effect<Action> {
   const handleError = ofError === undefined
-    ? ofSuccess as ((error: Error) => Action)
+    ? ofSuccess as ((error: Err) => Action)
     : ofError
 
   const handleSuccess = ofError === undefined
@@ -51,24 +51,24 @@ export function fromPromise<Action, Value, Error>(
   ];
 }
 
-export function fromFunction<Action, Value, Error>(
+export function fromFunction<Action, Value = unknown, Err = Error>(
   f: () => Value,
   ofSuccess: (value: Value) => Action,
-  ofError: (error: Error) => Action
+  ofError: (error: Err) => Action
 ): Effect<Action>
 
-export function fromFunction<Action, Value, Error>(
+export function fromFunction<Action, Value = unknown, Err = Error>(
   f: () => Value,
-  ofError: (error: Error) => Action
+  ofError: (error: Err) => Action
 ): Effect<Action>
 
-export function fromFunction<Action, Value, Error>(
+export function fromFunction<Action, Value, Err>(
   f: () => Value,
-  ofSuccess: ((value: Value) => Action) | ((error: Error) => Action),
-  ofError?: (error: Error) => Action
+  ofSuccess: ((value: Value) => Action) | ((error: Err) => Action),
+  ofError?: (error: Err) => Action
 ): Effect<Action> {
   const handleError = ofError === undefined
-    ? ofSuccess as ((error: Error) => Action)
+    ? ofSuccess as ((error: Err) => Action)
     : ofError
 
   const handleSuccess = ofError === undefined
