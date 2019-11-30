@@ -42,6 +42,7 @@ type EffectReducerAction<R extends Reducer<any, any>> = R extends Reducer<
   ? EffectAction<A>
   : never;
 
+/* istanbul ignore next */
 function throwIfNotNever(x: never) {
   if (!!x) {
     throw new TypeError(`Expected value ${x} to be of type "never"`);
@@ -63,6 +64,7 @@ function makeElmishReducer<R extends Reducer<any, any>>(reducer: R) {
           [...prevEffects, ...newEffects]
         ] as ReducerStateEffectPair<R>;
       }
+      /* istanbul ignore next */
       default: {
         return throwIfNotNever(action[0]);
       }
@@ -80,7 +82,7 @@ export function useElmish<R extends Reducer<any, any>>(
     null,
     initializer
   );
-  
+
   const subDispatch = React.useCallback((action: ReducerAction<R>) =>
     dispatch([domainAction, action] as EffectReducerAction<R>), [dispatch]
   );
