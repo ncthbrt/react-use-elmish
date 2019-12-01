@@ -27,7 +27,7 @@ export function attemptPromise<Action, Value = unknown, Err = Error>(
   return effectFromPromise<Action, Value, Err>(promise, ofError)
 }
 
-export function effectFromPromise<Action, Value, Err>(
+function effectFromPromise<Action, Value, Err>(
   promise: () => Promise<Value>,
   ofSuccess: ((value: Value) => Action) | ((error: Err) => Action),
   ofError?: (error: Err) => Action
