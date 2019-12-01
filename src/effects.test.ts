@@ -49,27 +49,94 @@ describe("action()", () => {
 });
 
 describe("fromPromise()", () => {
-  test("should return a array containing a single function", () => {
-    const effects = Effects.fromPromise(async () => Promise.resolve("FROG"));
+  test("should return a array containing a single function", async () => {
+    const effects = Effects.attemptPromise(
+      () => Promise.reject("FROG"),
+      () => "ERROR ACTION"
+    );
+
     expect(effects[0]).toBeInstanceOf(Function);
     expect(effects).toHaveLength(1);
   });
 
   test("should invoke provided dispatch once promise has resolved", async () => {
     const action = "BOOTS & CATS";
-    const effects = Effects.fromPromise(() => Promise.resolve(action));
+    const effects = Effects.fromPromise(
+      () => Promise.resolve(),
+      () => action,
+      () => "ERROR ACTION"
+    );
     const mockDispatch = jest.fn();
     await effects[0](mockDispatch);
     expect(mockDispatch).toHaveBeenCalledTimes(1);
+  });
+
+  test("should invoke provided dispatch once promise has rejected", async () => {
+    const effects = Effects.attemptPromise(
+      () => Promise.reject("FROG"),
+      () => "ERROR ACTION"
+    );
+    const mockDispatch = jest.fn();
+    await effects[0](mockDispatch);
+    expect(mockDispatch).toHaveBeenCalledTimes(1);
+  });
+
+  test(
+    "shouldn't invoke provided dispatch once promise has resolved " +
+    "but ofSuccess handler wasn't provided", async () => {
+    const effects = Effects.attemptPromise(
+      () => Promise.resolve("CATS"),
+      () => "ERROR ACTION"
+    );
+    const mockDispatch = jest.fn();
+    await effects[0](mockDispatch);
+    expect(mockDispatch).toHaveBeenCalledTimes(0);
   });
 });
 
 describe("fromFunction()", () => {
   test("should return input function in array containing single item", () => {
     const mockFn = jest.fn();
-    const effects = Effects.fromFunction(mockFn);
-    expect(effects[0]).toBe(mockFn);
+    const effects = Effects.attemptFunction(
+      mockFn,
+      () => "ERROR ACTION"
+    );
+    expect(effects[0]).toBeInstanceOf(Function);
     expect(effects).toHaveLength(1);
+  });
+
+  test("should invoke provided dispatch once function has succeeded", () => {
+    const action = "BOOTS & CATS";
+    const effects = Effects.fromFunction(
+      () => 1 + 2,
+      () => action,
+      () => "ERROR ACTION"
+    );
+    const mockDispatch = jest.fn();
+    effects[0](mockDispatch);
+    expect(mockDispatch).toHaveBeenCalledTimes(1);
+  });
+
+  test("should invoke provided dispatch once promise has thrown exception", () => {
+    const effects = Effects.attemptFunction(
+      () => { throw "FROG" },
+      () => "ERROR ACTION"
+    );
+    const mockDispatch = jest.fn();
+    effects[0](mockDispatch);
+    expect(mockDispatch).toHaveBeenCalledTimes(1);
+  });
+
+  test(
+    "shouldn't invoke provided dispatch once function has succeeded " +
+    "but ofSuccess handler wasn't provided", () => {
+    const effects = Effects.attemptFunction(
+      () => "CATS",
+      () => "ERROR ACTION"
+    );
+    const mockDispatch = jest.fn();
+    effects[0](mockDispatch);
+    expect(mockDispatch).toHaveBeenCalledTimes(0);
   });
 });
 
