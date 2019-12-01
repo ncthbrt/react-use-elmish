@@ -20,6 +20,14 @@ export function fromPromise<Action, Value = unknown, Err = Error>(
   return effectFromPromise<Action, Value, Err>(promise, ofSuccess, ofError)
 }
 
+export function dispatchFromPromise<Action, Err = Error>(
+  promise: () => Promise<Action>,
+  ofError: (error: Err) => Action
+): Effect<Action> {
+  return effectFromPromise<Action, Action, Err>(promise, (x: Action) => x, ofError)
+}
+
+
 export function attemptPromise<Action, Value = unknown, Err = Error>(
   promise: () => Promise<Value>,
   ofError: (error: Err) => Action
@@ -53,6 +61,13 @@ function effectFromPromise<Action, Value, Err>(
         })
     )
   ];
+}
+
+export function dispatchFromFunction<Action, Err = Error>(
+  f: () => Action,
+  ofError: (error: Err) => Action
+): Effect<Action> {
+  return effectFromFunction<Action, Action, Err>(f, (x: Action) => x, ofError)
 }
 
 export function fromFunction<Action, Value = unknown, Err = Error>(
@@ -98,8 +113,8 @@ function effectFromFunction<Action, Value, Err>(
   ];
 }
 
-export function fromIterator<Action, I extends Iterable<Action>>(
-  iterator: I
+export function fromIterator<Action>(
+  iterator: Iterable<Action>
 ): Effect<Action> {
   return [
     dispatch => {

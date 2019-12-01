@@ -84,13 +84,39 @@ describe("fromPromise()", () => {
   test(
     "shouldn't invoke provided dispatch once promise has resolved " +
     "but ofSuccess handler wasn't provided", async () => {
-    const effects = Effects.attemptPromise(
-      () => Promise.resolve("CATS"),
-      () => "ERROR ACTION"
+      const effects = Effects.attemptPromise(
+        () => Promise.resolve("CATS"),
+        () => "ERROR ACTION"
+      );
+      const mockDispatch = jest.fn();
+      await effects[0](mockDispatch);
+      expect(mockDispatch).toHaveBeenCalledTimes(0);
+    });
+});
+
+describe("dispatchFromPromise()", () => {
+  test("should invoke returned action once promise has succeeded", async () => {
+    const effects = Effects.dispatchFromPromise(
+      async () => 1 + 2,
+      () => -1
     );
     const mockDispatch = jest.fn();
     await effects[0](mockDispatch);
-    expect(mockDispatch).toHaveBeenCalledTimes(0);
+    expect(mockDispatch).toHaveBeenCalledTimes(1)
+    expect(mockDispatch).toHaveBeenNthCalledWith(1, 3);
+  });
+});
+
+describe("dispatchFromFunction()", () => {
+  test("should invoke returned action once function has succeeded", () => {
+    const effects = Effects.dispatchFromFunction(
+      () => 1 + 2,
+      () => -1
+    );
+    const mockDispatch = jest.fn();
+    effects[0](mockDispatch);
+    expect(mockDispatch).toHaveBeenCalledTimes(1)
+    expect(mockDispatch).toHaveBeenNthCalledWith(1, 3);
   });
 });
 
@@ -130,14 +156,14 @@ describe("fromFunction()", () => {
   test(
     "shouldn't invoke provided dispatch once function has succeeded " +
     "but ofSuccess handler wasn't provided", () => {
-    const effects = Effects.attemptFunction(
-      () => "CATS",
-      () => "ERROR ACTION"
-    );
-    const mockDispatch = jest.fn();
-    effects[0](mockDispatch);
-    expect(mockDispatch).toHaveBeenCalledTimes(0);
-  });
+      const effects = Effects.attemptFunction(
+        () => "CATS",
+        () => "ERROR ACTION"
+      );
+      const mockDispatch = jest.fn();
+      effects[0](mockDispatch);
+      expect(mockDispatch).toHaveBeenCalledTimes(0);
+    });
 });
 
 describe("fromIterator()", () => {
@@ -160,9 +186,9 @@ describe("fromIterator()", () => {
 
 describe("combine()", () => {
   test("should concatenate two effects together", () => {
-    const effect1 = Effects.fromIterator([1, 2, 3]);
+    const effect1 = Effects.fromIterator<number>([1, 2, 3]);
     const effect2 = Effects.action(4);
-    const effects = Effects.combine(effect1, effect2);
+    const effects = Effects.combine<number>(effect1, effect2);
     expect(effects[0]).toBeInstanceOf(Function);
     expect(effects[1]).toBeInstanceOf(Function);
     expect(effects).toHaveLength(2);
