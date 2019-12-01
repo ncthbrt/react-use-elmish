@@ -99,7 +99,7 @@ function effectFromFunction<Action, Value, Err>(
 }
 
 export function fromIterator<Action, I extends Iterable<Action>>(
-  iterator: Iterable<Action>
+  iterator: I
 ): Effect<Action> {
   return [
     dispatch => {
