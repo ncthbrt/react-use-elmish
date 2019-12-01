@@ -50,7 +50,7 @@ describe("action()", () => {
 
 describe("fromPromise()", () => {
   test("should return a array containing a single function", async () => {
-    const effects = Effects.fromPromise(
+    const effects = Effects.attemptPromise(
       () => Promise.reject("FROG"),
       () => "ERROR ACTION"
     );
@@ -72,7 +72,7 @@ describe("fromPromise()", () => {
   });
 
   test("should invoke provided dispatch once promise has rejected", async () => {
-    const effects = Effects.fromPromise(
+    const effects = Effects.attemptPromise(
       () => Promise.reject("FROG"),
       () => "ERROR ACTION"
     );
@@ -84,7 +84,7 @@ describe("fromPromise()", () => {
   test(
     "shouldn't invoke provided dispatch once promise has resolved " +
     "but ofSuccess handler wasn't provided", async () => {
-    const effects = Effects.fromPromise(
+    const effects = Effects.attemptPromise(
       () => Promise.resolve("CATS"),
       () => "ERROR ACTION"
     );
@@ -97,7 +97,7 @@ describe("fromPromise()", () => {
 describe("fromFunction()", () => {
   test("should return input function in array containing single item", () => {
     const mockFn = jest.fn();
-    const effects = Effects.fromFunction(
+    const effects = Effects.attemptFunction(
       mockFn,
       () => "ERROR ACTION"
     );
@@ -118,7 +118,7 @@ describe("fromFunction()", () => {
   });
 
   test("should invoke provided dispatch once promise has thrown exception", () => {
-    const effects = Effects.fromFunction(
+    const effects = Effects.attemptFunction(
       () => { throw "FROG" },
       () => "ERROR ACTION"
     );
@@ -130,7 +130,7 @@ describe("fromFunction()", () => {
   test(
     "shouldn't invoke provided dispatch once function has succeeded " +
     "but ofSuccess handler wasn't provided", () => {
-    const effects = Effects.fromFunction(
+    const effects = Effects.attemptFunction(
       () => "CATS",
       () => "ERROR ACTION"
     );
