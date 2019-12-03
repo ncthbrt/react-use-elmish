@@ -61,11 +61,21 @@ Yarn:
 
 `none()`: Not really an effect, rather a lack of one.
 
-`delay(action, delay)`: Dispatches `action` to the reducer `delay` milliseconds in the future.
+`delay(action: Action, delay: number)`: Dispatches `action` to the reducer `delay` milliseconds in the future.
 
-`action(action)` : Dispatches `action` to the reducer, immediately after this reducer has returned.
+`action(action: Action)` : Dispatches `action` to the reducer, immediately after this reducer has returned.
 
-`fromPromise(() => promise)`: Dispatches an action resolved from the given promise creator
+`fromPromise(promise: () => Promise<Value>, ofSuccess: Value => Action, ofError: Error => Action)`: Waits for a promise to resolve and then maps the success or error cases to an action and dispatches it. 
+
+`dispatchFromPromise(promise: () => Promise<Action>, ofError: Error => Action)`: Waits for a promise to resolve and then dispatches the returned action. If an error, maps the error to an action and dispatches it. 
+
+`attemptPromise(() => Promise<any>, ofError: Error => Action)`: Attempts to resolve the promise and ignores the result. Dispatches an action on failure. 
+
+`dispatchFromFunction(f: () => Action, ofError: Error => Action)`: Attempts to run the provided function and dispatch the result. On error, invokes the error action creator. 
+
+`fromFunction(f: () => Value, ofSuccess: Value => Action, ofError: Error => Action)`: Attempts to run the provided function and  and then maps the success or error results to an action and dispatches it. 
+
+`attemptFunction(f: () => Value, ofError: Error => Action)`: Attempts to run the function to completion, ignoring the result. Dispatches an action on failure. 
 
 `fromIterator(iterable)`: Dispatches each item in the iterable collection in order.
 
